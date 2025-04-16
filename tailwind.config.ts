@@ -52,6 +52,19 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				techoh: {
+					50: "#f0f5ff",
+					100: "#e5efff",
+					200: "#cce0ff",
+					300: "#99c2ff",
+					400: "#66a3ff",
+					500: "#3385ff",
+					600: "#0066ff",
+					700: "#0052cc",
+					800: "#004299",
+					900: "#003366",
+					950: "#001a33"
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
