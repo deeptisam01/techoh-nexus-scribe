@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,13 +27,14 @@ import {
   Settings, 
   LogOut 
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Navbar() {
   const isMobile = useIsMobile();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, profile, signOut } = useAuth();
+  const isLoggedIn = !!user;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -62,7 +62,7 @@ export function Navbar() {
                   <Link to="/bookmarks" className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     Bookmarks
                   </Link>
-                  {!isLoggedIn && (
+                  {!isLoggedIn ? (
                     <>
                       <Link to="/login" className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                         Login
@@ -70,6 +70,22 @@ export function Navbar() {
                       <Link to="/register" className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                         Register
                       </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                        Dashboard
+                      </Link>
+                      <Link to="/dashboard/profile" className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                        Profile
+                      </Link>
+                      <Button 
+                        variant="ghost" 
+                        className="flex items-center justify-start gap-2 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+                        onClick={() => signOut()}
+                      >
+                        Logout
+                      </Button>
                     </>
                   )}
                 </nav>
@@ -118,7 +134,7 @@ export function Navbar() {
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
               </Button>
               
-              <Link to="/editor">
+              <Link to="/dashboard/articles/new">
                 <Button variant="default" size={isMobile ? "icon" : "default"} className="animate-slide-in">
                   {isMobile ? <PenSquare className="h-5 w-5" /> : (
                     <>
@@ -133,8 +149,8 @@ export function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src="/placeholder.svg" alt="User" />
-                      <AvatarFallback>US</AvatarFallback>
+                      <AvatarImage src={profile?.avatar_url || ""} alt={profile?.username || "User"} />
+                      <AvatarFallback>{profile?.username?.substring(0, 2).toUpperCase() || "US"}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -154,19 +170,19 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/profile" className="flex items-center cursor-pointer">
+                    <Link to="/dashboard/profile" className="flex items-center cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/settings" className="flex items-center cursor-pointer">
+                    <Link to="/dashboard/settings" className="flex items-center cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
                       Settings
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setIsLoggedIn(false)} className="cursor-pointer">
+                  <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                   </DropdownMenuItem>

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -34,6 +35,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { signIn } = useAuth();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -47,20 +49,14 @@ export default function Login() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // TODO: Replace with actual authentication logic
-      console.log("Login data:", data);
+      await signIn(data.email, data.password);
       
       toast.success("Login successful", {
         description: "Welcome back to Tech-OH Blog!",
       });
-      
-      navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Login failed", {
-        description: "Please check your credentials and try again.",
+        description: error.message || "Please check your credentials and try again.",
       });
     } finally {
       setIsLoading(false);

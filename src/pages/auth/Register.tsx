@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z
   .object({
@@ -54,10 +55,10 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 export default function Register() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { signUp } = useAuth();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -74,20 +75,19 @@ export default function Register() {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // TODO: Replace with actual registration logic
-      console.log("Registration data:", data);
+      await signUp({
+        email: data.email,
+        password: data.password,
+        username: data.username,
+        name: data.name
+      });
       
       toast.success("Registration successful", {
         description: "Welcome to Tech-OH Blog!",
       });
-      
-      navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Registration failed", {
-        description: "Please check your information and try again.",
+        description: error.message || "Please check your information and try again.",
       });
     } finally {
       setIsLoading(false);
