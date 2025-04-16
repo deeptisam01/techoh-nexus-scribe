@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PenSquare, Clock, CalendarDays } from 'lucide-react';
+import { PenSquare, Clock, CalendarDays, FileText as FileTextIcon, FileEdit as FileEditIcon, User as UserIcon } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 export default function Dashboard() {
@@ -75,7 +74,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Articles</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+              <FileTextIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{loading ? '...' : stats.totalArticles}</div>
@@ -114,7 +113,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Drafts</CardTitle>
-              <FileEdit className="h-4 w-4 text-muted-foreground" />
+              <FileEditIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{loading ? '...' : stats.draftArticles}</div>
@@ -200,13 +199,13 @@ export default function Dashboard() {
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/dashboard/articles">
-                  <FileText className="mr-2 h-4 w-4" />
+                  <FileTextIcon className="mr-2 h-4 w-4" />
                   Manage articles
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/dashboard/profile">
-                  <User className="mr-2 h-4 w-4" />
+                  <UserIcon className="mr-2 h-4 w-4" />
                   Update profile
                 </Link>
               </Button>

@@ -122,13 +122,14 @@ export default function Profile() {
       const fileName = `${user?.id}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
       
-      // Check if this is the first avatar upload
-      const { data: storageData, error: storageError } = await supabase.storage.getBuckets();
+      // Check if avatars bucket exists
+      const { data: bucketList, error: bucketListError } = await supabase.storage.listBuckets();
       
-      if (storageError) throw storageError;
+      if (bucketListError) throw bucketListError;
       
       // Create avatars bucket if it doesn't exist
-      if (!storageData?.find(bucket => bucket.name === 'avatars')) {
+      const bucketExists = bucketList?.some(bucket => bucket.name === 'avatars');
+      if (!bucketExists) {
         const { error: createBucketError } = await supabase.storage.createBucket('avatars', {
           public: true,
           fileSizeLimit: 1024 * 1024 * 2, // 2MB
