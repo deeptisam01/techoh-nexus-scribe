@@ -1,10 +1,10 @@
 
 import { User } from '@supabase/supabase-js';
-import { Profile } from '@/integrations/supabase/types';
+import { Tables } from '@/integrations/supabase/types';
 
 interface AccountInfoProps {
   user: User | null;
-  profile: Profile | null;
+  profile: Tables['profiles'] | null;
 }
 
 export const AccountInfo = ({ user, profile }: AccountInfoProps) => {
