@@ -4,7 +4,7 @@ import { Tables } from '@/integrations/supabase/types';
 
 interface AccountInfoProps {
   user: User | null;
-  profile: Tables['profiles'] | null;
+  profile: Tables<'profiles'> | null;
 }
 
 export const AccountInfo = ({ user, profile }: AccountInfoProps) => {
